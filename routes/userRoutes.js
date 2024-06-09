@@ -9,5 +9,6 @@ router
   .post(userControllers.createUser);
 
 router.route("/:_id/exercises").post(userControllers.createExercise);
+router.route("/:_id/logs").get(userControllers.getExerciseLog);
 
 module.exports = router;
