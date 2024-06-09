@@ -6,7 +6,7 @@ const User = require("./../models/userModel");
 exports.createUser = async (req, res) => {
   try {
     if (!req.body.username) {
-      return res.status(400).json({
+      return res.json({
         message: "Please enter username",
       });
     }
@@ -17,10 +17,10 @@ exports.createUser = async (req, res) => {
 
     newUser = await User.findById(newUser._id).select("-exercises -logs");
 
-    res.status(201).json(newUser);
+    res.json(newUser);
   } catch (error) {
     console.log(error);
-    res.status(500).json({
+    res.json({
       error: error.message,
     });
   }
@@ -33,10 +33,10 @@ exports.getAllUsers = async (req, res) => {
   try {
     const users = await User.find();
 
-    res.status(200).json(users);
+    res.json(users);
   } catch (error) {
     console.log(error);
-    res.status(500).json({
+    res.json({
       error: error.message,
     });
   }
@@ -51,7 +51,7 @@ exports.createExercise = async (req, res) => {
     const user = await User.findById(id);
 
     if (!user) {
-      return res.status(404).json({
+      return res.json({
         message: "No user found",
       });
     }
@@ -64,7 +64,7 @@ exports.createExercise = async (req, res) => {
       : new Date().toDateString();
 
     if (!description || !duration) {
-      return res.status(400).json({
+      return res.json({
         message: "Please fill in all required fields",
       });
     }
@@ -81,10 +81,10 @@ exports.createExercise = async (req, res) => {
 
     await user.save();
 
-    res.status(201).json(newExercise);
+    res.json(newExercise);
   } catch (error) {
     console.log(error);
-    res.status(500).json({
+    res.json({
       error: error.message,
     });
   }
