@@ -8,4 +8,6 @@ router
   .get(userControllers.getAllUsers)
   .post(userControllers.createUser);
 
+router.route("/:_id/exercises").post(userControllers.createExercise);
+
 module.exports = router;
