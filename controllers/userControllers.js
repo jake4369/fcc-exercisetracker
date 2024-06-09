@@ -23,3 +23,19 @@ exports.createUser = async (req, res) => {
     });
   }
 };
+
+// @Desc - Get an array of all users
+// @Method - GET
+// @Route - /api/users
+exports.getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find();
+
+    res.status(200).json(users);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      error: error.message,
+    });
+  }
+};
