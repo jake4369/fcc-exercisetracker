@@ -15,7 +15,7 @@ exports.createUser = async (req, res) => {
       username: req.body.username,
     });
 
-    newUser = await User.findById(newUser._id).select("-exercises -logs");
+    newUser = await User.findById(newUser._id).select("-exercises -log");
 
     res.status(201).json(newUser);
   } catch (error) {
@@ -78,10 +78,53 @@ exports.createExercise = async (req, res) => {
     };
 
     user.exercises.push(newExercise);
+    user.log.log.push(newExercise);
 
     await user.save();
 
     res.status(201).json(newExercise);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      error: error.message,
+    });
+  }
+};
+
+// @Desc - Get a full exercise log of any user
+// @Method - GET
+// @Route - /api/users/:_id/logs
+exports.getExerciseLog = async (req, res) => {
+  try {
+    const id = req.params._id;
+    const user = await User.findById(id);
+
+    if (!user) {
+      return res.status(404).json({
+        message: "No user found",
+      });
+    }
+
+    const username = user.username;
+    const exercises = user.exercises || [];
+    const count = exercises.length;
+
+    const formattedLogs = (user.log.log || []).map(
+      ({ description, duration, date }) => ({
+        description,
+        duration,
+        date: date.toDateString(),
+      })
+    );
+
+    const logObj = {
+      username,
+      count,
+      _id: id,
+      log: formattedLogs,
+    };
+
+    res.status(200).json(logObj);
   } catch (error) {
     console.log(error);
     res.status(500).json({
