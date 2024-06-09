@@ -8,17 +8,10 @@ const UserSchema = new mongoose.Schema(
       required: [true, "Please enter username"],
     },
     exercises: {
-      type: [
-        {
-          username: { type: String },
-          description: { type: String },
-          duration: { type: Number },
-          date: {
-            type: Date,
-            default: Date.now,
-          },
-        },
-      ],
+      type: [Object],
+    },
+    log: {
+      type: [Object],
     },
   },
   { versionKey: false }
